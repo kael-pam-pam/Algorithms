@@ -1,0 +1,33 @@
+MarGU (A)
+* Agrarian-technological institute (AA)
+** Department of Livestock Production Technology (AAA)
+*** Chase
+*** branch1 (AAAA)
+**** Ivanob
+**** Petrov
+**** Sidorov
+*** branch2 (AAAB)
+**** Gibson
+**** Lang
+** Department of mechanization of production and processing of agricultural products (AAB)
+*** Ivanov
+*** branch1 (AABA)
+**** George
+**** Chase
+*** branch2 (AABB)
+**** Perkins
+** Department of storage technology and processing of crop products (AAC)
+*** branch1 (AACA)
+**** Maxwell
+**** Hall
+**** Armstrong
+*** branch2 (AACB)
+**** Charles
+**** West
+** Department of Technology of Meat and Dairy Products (AAD)
+*** Ivanov
+*** branch1 (AADA)
+**** Blake
+**** Grant
+**** Chase
+**** Ivanov
