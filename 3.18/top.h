@@ -7,6 +7,7 @@ struct Top
     bool needDetour;
     Top *next;
     void *indexArc;
+    void *pathArc;
 };
 
 void deleteTops(Top *&tops)
@@ -68,6 +69,8 @@ Top* createTop(Top *&tops, std::string elemName)
     curr->minWeight = INT_MAX;
     curr->needDetour = true;
     curr->next = nullptr;
+    curr->indexArc = nullptr;
+    curr->pathArc = nullptr;
     if (tops == nullptr)
     {
         tops = curr;

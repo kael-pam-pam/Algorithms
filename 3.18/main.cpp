@@ -130,7 +130,7 @@ void findShortestPath(Top *&tops, Arc *&arcs)
 }
 
 
-bool createTopsAndArcs(std::ifstream &finput, Top *&tops, Arc *&arcs)
+bool createTopsAndArcs(std::ifstream &finput, Top *&tops, Arc *&tailArc, Arc *&arcs)
 {
     int lineNumber = 0, errorNumber = 0;
     std::string inputFile;
@@ -146,21 +146,21 @@ bool createTopsAndArcs(std::ifstream &finput, Top *&tops, Arc *&arcs)
         {
             fromTop = createTop(tops, resultSearch[1]);
             toTop = createTop(tops, resultSearch[2]);
-            if (!(createArc(fromTop, toTop, std::stoi(resultSearch[3]), arcs)) || !(createArc(toTop, fromTop, std::stoi(resultSearch[3]), arcs)))
+            if (!(createArc(fromTop, toTop, std::stoi(resultSearch[3]), arcs, tailArc)) || !(createArc(toTop, fromTop, std::stoi(resultSearch[3]), arcs, tailArc)))
                 errorNumber = 1;
         }
         else if (std::regex_match(inputFile, resultSearch, searchDataTO))
         {
             fromTop = createTop(tops, resultSearch[1]);
             toTop = createTop(tops, resultSearch[2]);
-            if (!(createArc(toTop, fromTop, std::stoi(resultSearch[3]), arcs)))
+            if (!(createArc(toTop, fromTop, std::stoi(resultSearch[3]), arcs, tailArc)))
                 errorNumber = 1;
         }
         else if (std::regex_match(inputFile, resultSearch, searchDataFR))
         {
             fromTop = createTop(tops, resultSearch[1]);
             toTop = createTop(tops, resultSearch[2]);
-            if (!(createArc(fromTop, toTop, std::stoi(resultSearch[3]), arcs)))
+            if (!(createArc(fromTop, toTop, std::stoi(resultSearch[3]), arcs, tailArc)))
                 errorNumber = 1;
         }
         else
@@ -177,7 +177,7 @@ bool createTopsAndArcs(std::ifstream &finput, Top *&tops, Arc *&arcs)
     return true;
 }
 
-void loadGraphFromFile(Top *&tops, Arc *&arcs)
+void loadGraphFromFile(Top *&tops, Arc *&tailArc, Arc *&arcs)
 {
     std::ifstream fin;
     fin.open(FILE_PATH);
@@ -186,7 +186,7 @@ void loadGraphFromFile(Top *&tops, Arc *&arcs)
        std::cout << ERROR_FILE_IS_NOT_OPEN << std::endl;
        return;
     }
-    if (createTopsAndArcs(fin, tops, arcs))
+    if (createTopsAndArcs(fin, tops, tailArc, arcs))
         std::cout << DATA_LOADED << std::endl;
     fin.close();  
 }
@@ -201,7 +201,7 @@ void mainMenu()
 {
     char inputKey;   
     Top *headTop = nullptr;
-    Arc *headArc = nullptr;
+    Arc *headArc = nullptr, *tailArc = nullptr;
 
     showMainMenu();
     do
@@ -212,7 +212,7 @@ void mainMenu()
             case 'a':
                 deleteArcs(headArc);
                 deleteTops(headTop);
-                loadGraphFromFile(headTop, headArc);
+                loadGraphFromFile(headTop, tailArc, headArc);
                 break;
             case 's':
                 printTops(headTop);

@@ -40,29 +40,52 @@ void printArcs(Arc *arcs)
     std::cout << std::endl;
 }
 
-bool createArc(Top *&fromTop, Top *&toTop, int weight, Arc *&arcs)
+bool createArc(Top *&fromTop, Top *&toTop, int weight, Arc *&arcs, Arc *&tailArc)
 {
-    Arc *curr = arcs;
-    Arc *prev = nullptr;
-    while (curr != nullptr)
+    Arc *curr;
+    if (fromTop->indexArc == nullptr)
     {
-        if ((curr->fromTop == fromTop) && (curr->toTop == toTop))
+        curr = new Arc;
+        curr->fromTop = fromTop;
+        curr->toTop = toTop;
+        curr->weight = weight;
+        curr->next = nullptr;
+
+        fromTop->indexArc = curr;
+
+        if (arcs == nullptr)
         {
-            return false;
+            arcs = curr;
+            tailArc = curr;
         }
-        prev = curr;
-        curr = curr->next;
-    }
-    curr = new Arc;
-    curr->fromTop = fromTop;
-    curr->toTop = toTop;
-    curr->weight = weight;
-    curr->next = nullptr;
-    if (arcs == nullptr)
+        else
+        {
+           tailArc->next = curr;
+           tailArc = curr;
+        }
+        return true;
+    } 
+    else
     {
-        arcs = curr;
+        curr = static_cast<Arc*>(fromTop->indexArc);
+        Arc *prev = nullptr, *newest = nullptr;
+        while ((curr != nullptr) && (curr->fromTop == fromTop))
+        {
+            if ((curr->fromTop == fromTop) && (curr->toTop == toTop))
+            {
+                return false;
+            }
+            prev = curr;
+            curr = curr->next;
+        }
+        newest = new Arc;
+        newest->fromTop = fromTop;
+        newest->toTop = toTop;
+        newest->weight = weight;
+        newest->next = prev->next;
+        prev->next = newest;
+        if (curr == nullptr)
+            tailArc = newest;
         return true;
     }
-    prev->next = curr;
-    return true;
 }
