@@ -16,24 +16,17 @@
 #include "top.h"
 #include "arc.h"
 
-struct MinPath
+void calc(Top *mT)
 {
-    Top toTopName;
-    Arc *path;
-    MinPath *next;
-};
-
-
-void calc(Top *&tops, Arc *&arcs, Top *mT)
-{
-    Arc *curr = arcs;
-    while (curr != nullptr)
+    Arc *curr = static_cast<Arc*>(mT->indexArc); 
+    while ((curr != nullptr) && (curr->fromTop == mT))
     {
-        if (curr->fromTop == mT)
-        {
-            if ((curr->toTop->needDetour != false) &&
+        if ((curr->toTop->needDetour != false) &&
             (curr->weight + mT->minWeight < curr->toTop->minWeight))
-                curr->toTop->minWeight = curr->weight + mT->minWeight;
+        {
+            curr->toTop->minWeight = curr->weight + mT->minWeight;
+            curr->toTop->path.clear();
+            curr->toTop->path.push_back(mT->name);
         }
         curr = curr->next;
     }
@@ -52,41 +45,43 @@ void algorithmDijkstra(Top *&tops, Arc *&arcs, Top *&fromTop, Top *&toTop)
     fT = tops;
     while (fT != nullptr)
     {
-        std::cout << "    [" << fT->name << "]";
+        std::cout << "[" << fT->name << "]\t";
         fT = fT->next;
     }
     std::cout << std::endl;
+    std::cout << "---" << std::endl;
     
     Top* mT = fromTop;
-    fromTop->minWeight = 0;
-    fromTop->needDetour = false;
-    printTopsMinWeight(tops);
-    calc(tops, arcs, mT);
-    printTopsMinWeight(tops);
+    mT->minWeight = 0;
 
-    mT = getTopWithMinestWeight(tops);
-    mT->needDetour = false;
-    printTopsMinWeight(tops);
-    calc(tops, arcs, mT);
-    printTopsMinWeight(tops);
+    do
+    {
+        mT->needDetour = false;
 
-    mT = getTopWithMinestWeight(tops);
-    mT->needDetour = false;
-    printTopsMinWeight(tops);
-    calc(tops, arcs, mT);
-    printTopsMinWeight(tops);
+        if (mT->path.size() != 0)
+        {
+            Top *t = getTopByName(tops, mT->path[0]);
+            mT->path.clear();
+            for (int i = 0; i < t->path.size(); i++)
+            {
+                mT->path.push_back(t->path[i]);
+            }
+            mT->path.push_back(t->name);
+        }
 
-    mT = getTopWithMinestWeight(tops);
-    mT->needDetour = false;
-    printTopsMinWeight(tops);
-    calc(tops, arcs, mT);
-    printTopsMinWeight(tops);
+        printTopsMinWeight(tops);
+        calc(mT);
+        printTopsMinWeight(tops);
+        std::cout << "---" << std::endl;
+        mT = getTopWithMinestWeight(tops);
+    } while (mT != nullptr);  
 
-    mT = getTopWithMinestWeight(tops);
-    mT->needDetour = false;
-    printTopsMinWeight(tops);
-    calc(tops, arcs, mT);
-    printTopsMinWeight(tops);
+    std::cout << std::endl << "Path from [" << fromTop->name << "] to [" << toTop->name << "]: ";
+    for (int i = 0; i < toTop->path.size(); i++)
+    {
+        std::cout << "[" << toTop->path[i] << "]->";
+    }
+    std::cout << "[" << toTop->name << "]" << std::endl;
 }
 
 void findShortestPath(Top *&tops, Arc *&arcs)
