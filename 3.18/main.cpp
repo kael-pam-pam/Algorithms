@@ -135,13 +135,28 @@ bool createTopsAndArcs(std::ifstream &finput, Top *&tops, Arc *&arcs)
     int lineNumber = 0, errorNumber = 0;
     std::string inputFile;
     std::smatch resultSearch;
-    const std::regex searchData(FORMAT_FILE);
-    Top *fromTop = nullptr;
-    Top *toTop = nullptr;
+    const std::regex searchDataEQ(FORMAT_FILE_EQ);
+    const std::regex searchDataTO(FORMAT_FILE_TO);
+    const std::regex searchDataFR(FORMAT_FILE_FR);
+    Top *fromTop = nullptr, *toTop = nullptr;
     while (getline(finput, inputFile))
     {
         lineNumber++;
-        if (std::regex_match(inputFile, resultSearch, searchData))
+        if (std::regex_match(inputFile, resultSearch, searchDataEQ))
+        {
+            fromTop = createTop(tops, resultSearch[1]);
+            toTop = createTop(tops, resultSearch[2]);
+            if (!(createArc(fromTop, toTop, std::stoi(resultSearch[3]), arcs)) || !(createArc(toTop, fromTop, std::stoi(resultSearch[3]), arcs)))
+                errorNumber = 1;
+        }
+        else if (std::regex_match(inputFile, resultSearch, searchDataTO))
+        {
+            fromTop = createTop(tops, resultSearch[1]);
+            toTop = createTop(tops, resultSearch[2]);
+            if (!(createArc(toTop, fromTop, std::stoi(resultSearch[3]), arcs)))
+                errorNumber = 1;
+        }
+        else if (std::regex_match(inputFile, resultSearch, searchDataFR))
         {
             fromTop = createTop(tops, resultSearch[1]);
             toTop = createTop(tops, resultSearch[2]);

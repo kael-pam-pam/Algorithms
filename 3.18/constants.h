@@ -12,7 +12,9 @@ const std::string TOPS_DELETED = "Tops deleted.";
 const std::string DATA_LOADED = "Data loaded from file " + FILE_PATH;
 const std::string INPUT_TOPS_FOR_FIND_PATH = "Enter two tops (FROM and TO) through space: ";
 const std::string OPERATION_CANCELED = "Operation canceled!";
-const std::string FORMAT_FILE = "^([a-zA-Z]{1,})\\s([a-zA-Z]{1,})\\s([0-9]{1,})$";
+const std::string FORMAT_FILE_EQ = "^([a-zA-Z]{1,})\\s-\\s([a-zA-Z]{1,})\\s([0-9]{1,})$";
+const std::string FORMAT_FILE_TO = "^([a-zA-Z]{1,})\\s<-\\s([a-zA-Z]{1,})\\s([0-9]{1,})$";
+const std::string FORMAT_FILE_FR = "^([a-zA-Z]{1,})\\s->\\s([a-zA-Z]{1,})\\s([0-9]{1,})$";
 const std::string FORMAT_INPUT_2_TOPS = "^([a-zA-Z]{1,})\\s([a-zA-Z]{1,})$";
 const std::string MENU_TEXT = R"("====================== Task 3.18 ======================="
 "========================================================"

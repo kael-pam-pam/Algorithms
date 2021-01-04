@@ -34,7 +34,7 @@ void printArcs(Arc *arcs)
     std::cout << "ARCS: ";
     while (arcs != nullptr)
     {
-        std::cout << "[" << arcs->fromTop->name << "]--" << arcs->weight << "--[" << arcs->toTop->name << "] ";
+        std::cout << "[" << arcs->fromTop->name << "]--" << arcs->weight << "-->[" << arcs->toTop->name << "] ";
         arcs = arcs->next;
     }
     std::cout << std::endl;
