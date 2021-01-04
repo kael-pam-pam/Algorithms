@@ -109,18 +109,18 @@ void findShortestPath(Top *&tops, Arc *&arcs)
         toTop = getTopByName(tops, resultSearch[2]);
         if ((fromTop == nullptr) || (toTop == nullptr))
         {
-            std::cout << "Input top is not exists!" << std::endl;
+            std::cout << ERROR_TOP_NOT_EXISTS << std::endl;
             return;
         }
         if (fromTop == toTop)
         {
-            std::cout << "FROM and TO tops must be not equal!" << std::endl;
+            std::cout << ERROR_FROM_TO_EQUAL << std::endl;
             return;
         }
         algorithmDijkstra(tops, arcs, fromTop, toTop);
         return;
     }
-    std::cout << "Wrong input format!" << std::endl;
+    std::cout << ERROR_WRONG_INPUT_FORMAT << std::endl;
     return;
 }
 
