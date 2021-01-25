@@ -70,7 +70,6 @@ Top* createTop(Top *&tops, std::string elemName)
     curr->needDetour = true;
     curr->next = nullptr;
     curr->indexArc = nullptr;
-    //curr->pathArc = nullptr;
     if (tops == nullptr)
     {
         tops = curr;
@@ -85,7 +84,6 @@ void printTopsMinWeight(Top *tops)
     Top *fT = tops;
     while (fT != nullptr)
     {     
-        //std::cout << "    "; 
         if (fT->minWeight == INT_MAX)
         {
             std::cout << "INF";

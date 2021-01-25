@@ -13,6 +13,7 @@
 #include <regex>
 #include <cmath>
 #include <stdio.h>
+#include <ctime>
 
 #include "constants.h"
 
@@ -157,9 +158,9 @@ void filesMerge(std::fstream &fF1, std::fstream &fF2, std::fstream &fT, int turn
         else if ((turn != 1) && ((numElem1 % turn == 0) || (numElem2 % turn == 0)))
         {
             bool *ttt; 
-            int aaa;
-            if (!first) {ttt = &first; aaa = a;}
-            if (!second) {ttt = &second; aaa = b;}
+            int num;
+            if (!first) {ttt = &first; num = a;}
+            if (!second) {ttt = &second; num = b;}
 
             if (numElem2 % turn != 0)
             {
@@ -168,16 +169,16 @@ void filesMerge(std::fstream &fF1, std::fstream &fF2, std::fstream &fT, int turn
                     if (!getNumber(fF2, b))
                         break;
 
-                    if ((!*ttt) && (aaa < b))
+                    if ((!*ttt) && (num < b))
                     {   
-                        insertNumber(fT, hasRec, aaa);
+                        insertNumber(fT, hasRec, num);
                         *ttt = true;
                     }
                     insertNumber(fT, hasRec, b);
                     numElem2++;
                 }
                 if (!*ttt) 
-                    insertNumber(fT, hasRec, aaa); 
+                    insertNumber(fT, hasRec, num); 
                 *ttt = true;
             }
             numElem2 = 0;
@@ -189,16 +190,16 @@ void filesMerge(std::fstream &fF1, std::fstream &fF2, std::fstream &fT, int turn
                     if (!getNumber(fF1, a))
                         break;
 
-                    if ((!*ttt) && (aaa < a))
+                    if ((!*ttt) && (num < a))
                     {   
-                        insertNumber(fT, hasRec, aaa);
+                        insertNumber(fT, hasRec, num);
                         *ttt = true;
                     }
                     insertNumber(fT, hasRec, a);
                     numElem1++;
                 }
                 if (!*ttt) 
-                    insertNumber(fT, hasRec, aaa); 
+                    insertNumber(fT, hasRec, num); 
                 *ttt = true;
             }
             numElem1 = 0;
@@ -206,24 +207,24 @@ void filesMerge(std::fstream &fF1, std::fstream &fF2, std::fstream &fT, int turn
     }
     
     bool flag; 
-    int aaa;
+    int remaindNumber;
     flag = first && second;
-    if (!first) aaa = a;
-    if (!second) aaa = b;
+    if (!first) remaindNumber = a;
+    if (!second) remaindNumber = b;
 
     if (!fF1.eof())
     {
         while (getNumber(fF1, a))
         {
-            if ((!flag) && (aaa < a))
+            if ((!flag) && (remaindNumber < a))
             {   
-                insertNumber(fT, hasRec, aaa);
+                insertNumber(fT, hasRec, remaindNumber);
                 flag = true;
             }
             insertNumber(fT, hasRec, a);
         }
         if (!flag) 
-            insertNumber(fT, hasRec, aaa); 
+            insertNumber(fT, hasRec, remaindNumber); 
         flag = true;
     }
 
@@ -231,15 +232,15 @@ void filesMerge(std::fstream &fF1, std::fstream &fF2, std::fstream &fT, int turn
     {
          while (getNumber(fF2, b))
          {
-            if ((!flag) && (aaa < b))
+            if ((!flag) && (remaindNumber < b))
             {   
-                insertNumber(fT, hasRec, aaa);
+                insertNumber(fT, hasRec, remaindNumber);
                 flag = true;
             }
             insertNumber(fT, hasRec, b);
         }
         if (!flag) 
-            insertNumber(fT, hasRec, aaa); 
+            insertNumber(fT, hasRec, remaindNumber); 
         flag = true;
     }
 
@@ -248,10 +249,22 @@ void filesMerge(std::fstream &fF1, std::fstream &fF2, std::fstream &fT, int turn
     fF2.close();      
 }
 
+void print(std::fstream &finput)
+{
+    std::string inputFile;
+    while (getline(finput, inputFile))
+    {
+        std::cout << inputFile << std::endl;
+    }
+}
+
 void calc()
 {
     std::fstream fInp, fTemp1, fTemp2, fOut;
+    int start = clock(); 
     int power = 0, turn, countElem;
+
+    std::cout << "Start sorting file input.txt." << std::endl; 
 
     fInp.open(INPUT_FILE_PATH, std::ios::in);
     if (!checkFile(fInp))
@@ -279,8 +292,17 @@ void calc()
         fTemp2.open(TEMP_FILE_2_PATH, std::ios::in);
         filesMerge(fTemp1, fTemp2, fOut, turn);
 
+        std::cout << power << ": ";
+        fOut.open(OUTPUT_PATH, std::ios::in);
+        print(fOut);
+        std::cout << std::endl;
+        fOut.close();
+
         power++;
     }
+    int end = clock();
+    int t = (end - start) / CLOCKS_PER_SEC;
+    std::cout << "Sorting finished. It take " << t << " seconds. The result is located in file output.txt." << std::endl;
 }
 
 void showMainMenu()
